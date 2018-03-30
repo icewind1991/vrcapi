@@ -146,7 +146,7 @@ export class Api {
 	}
 
 	private parseLocation(location: string): InstanceId | null {
-		return (location.indexOf(':') !== -1) ?
+		return (location.indexOf(':') === -1) ?
 			null :
 			{
 				world: location.split(':')[0],
