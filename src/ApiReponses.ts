@@ -1,6 +1,6 @@
 export type DeveloperType = 'none' | 'trusted' | 'internal' | 'moderator';
 
-export interface InstanceUserResponse {
+export interface BaseUserResponse {
 	id: string;
 	username: string;
 	displayName: string;
@@ -15,7 +15,7 @@ export interface PastDisplayName {
 	updated_at: string;
 }
 
-export interface UserResponse extends InstanceUserResponse {
+export interface UserResponse extends BaseUserResponse {
 	pastDisplayNames: PastDisplayName[];
 	worldId: string;
 	instanceId: string;
@@ -62,7 +62,7 @@ export interface InstanceResponse {
 	id: string;
 	private: boolean;
 	friends: boolean;
-	users: InstanceUserResponse[];
+	users: BaseUserResponse[];
 	name: string;
 	hidden?: string;
 	canRequestInvite?: string;
@@ -129,3 +129,9 @@ export interface AuthUserResponse {
 	developerType: DeveloperType;
 	authToken: string;
 }
+
+export interface LocationUserResponse extends BaseUserResponse {
+	location: string;
+}
+
+export type FriendsResponse = LocationUserResponse[];

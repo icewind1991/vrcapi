@@ -1,14 +1,14 @@
 import {InstaceAccessTag, Instance, InstanceId, User, World, WorldId} from './Data';
 import {
-	AuthUserResponse, ConfigResponse, InstanceResponse, InstanceUserResponse, UserResponse,
-	WorldResponse
+	AuthUserResponse, ConfigResponse, InstanceResponse, BaseUserResponse, UserResponse,
+	WorldResponse, FriendsResponse
 } from './ApiReponses';
 
-function hasLocation(data: UserResponse | InstanceUserResponse): data is UserResponse {
+function hasLocation(data: UserResponse | BaseUserResponse): data is UserResponse {
 	return data.hasOwnProperty('location');
 }
 
-function formatUserResponse(data: UserResponse | InstanceUserResponse, location?: InstanceId | null): User {
+function formatUserResponse(data: UserResponse | BaseUserResponse, location?: InstanceId | null): User {
 	if (!location) {
 		location = (hasLocation(data) && data.instanceId) ? {
 			world: data.worldId,
@@ -88,10 +88,6 @@ export class Api {
 			.then(formatUserResponse);
 	}
 
-	private getCurrentUser(): Promise<AuthUserResponse> {
-		return this.getRequest(`https://vrchat.com/api/1/auth/user`);
-	}
-
 	private parseInstanceAccessTag(data: InstanceResponse): InstaceAccessTag {
 		if (data.hidden && !data.friends && !data.private) {
 			return InstaceAccessTag.FriendsPlus;
@@ -108,7 +104,7 @@ export class Api {
 		return InstaceAccessTag.Public;
 	}
 
-	getInstaceById(id: InstanceId): Promise<Instance> {
+	getInstanceById(id: InstanceId): Promise<Instance> {
 		return this.getRequest(`https://vrchat.com/api/1/worlds/${id.world}/${id.instance}`)
 			.then((data: InstanceResponse) => {
 				return {
@@ -147,5 +143,19 @@ export class Api {
 					}))
 				};
 			});
+	}
+
+	private parseLocation(location: string): InstanceId | null {
+		return (location.indexOf(':') !== -1) ?
+			null :
+			{
+				world: location.split(':')[0],
+				instance: location.split(':')[1]
+			};
+	}
+
+	getFriends(): Promise<User[]> {
+		return this.getRequest('https://vrchat.com/api/1/auth/user/friends')
+			.then((data: FriendsResponse) => data.map(entry => formatUserResponse(entry, this.parseLocation(entry.location))));
 	}
 }

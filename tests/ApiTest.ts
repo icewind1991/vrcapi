@@ -36,7 +36,7 @@ suite('Api', () => {
 				}
 				throw new Error('No public instance found');
 			})
-			.then(api.getInstaceById.bind(api))
+			.then(api.getInstanceById.bind(api))
 			.then(instance => {
 				assert.equal(instance.access, InstaceAccessTag.Public);
 			});
@@ -52,7 +52,7 @@ suite('Api', () => {
 				}
 				throw new Error('No public instance found');
 			})
-			.then(api.getInstaceById.bind(api))
+			.then(api.getInstanceById.bind(api))
 			.then(instance => {
 				assert.equal(instance.access, InstaceAccessTag.FriendsPlus);
 			});
