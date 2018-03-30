@@ -14,5 +14,8 @@
 		"strictNullChecks": true,
 		"sourceMap": true,
 		"moduleResolution": "node"
-	}
+	},
+	"include": [
+		"src"
+	]
 }

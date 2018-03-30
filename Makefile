@@ -11,7 +11,7 @@ node_modules: package.json
 watch: node_modules
 	node $(tsc) --watch
 
-build: node_modules $(sources)
+build: node_modules $(sources) tsconfig.json
 	node $(tsc)
 
 test:
