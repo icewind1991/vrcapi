@@ -1,7 +1,7 @@
 {
   "name": "vrcapi",
   "description": "Api client for VRChat",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "build/Api.js",
   "devDependencies": {
     "@types/node": "^9.6.1",
