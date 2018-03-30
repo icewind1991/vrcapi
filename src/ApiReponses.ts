@@ -65,6 +65,7 @@ export interface InstanceResponse {
 	users: InstanceUserResponse[];
 	name: string;
 	hidden?: string;
+	canRequestInvite?: string;
 	nonce?: string;
 }
 

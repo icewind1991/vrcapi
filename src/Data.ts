@@ -25,12 +25,19 @@ export interface World {
 	instances: Map<InstanceId, number>;
 }
 
+export enum InstaceAccessTag {
+	Public,
+	FriendsPlus,
+	Friends,
+	Invite,
+	InvitePlus
+}
+
 export interface Instance {
 	id: InstanceId;
 	users: User[];
-	private: boolean;
-	friends: boolean;
 	nonce?: string;
+	access: InstaceAccessTag;
 }
 
 export interface User {

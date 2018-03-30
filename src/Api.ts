@@ -1,4 +1,4 @@
-import {Instance, InstanceId, User, World, WorldId} from './Data';
+import {InstaceAccessTag, Instance, InstanceId, User, World, WorldId} from './Data';
 import {
 	AuthUserResponse, ConfigResponse, InstanceResponse, InstanceUserResponse, UserResponse,
 	WorldResponse
@@ -60,8 +60,6 @@ export class Api {
 		return fetch(this.proxyHandler(url), {
 			mode: 'cors',
 			headers: {
-				'origin': 'vrchat.com',
-				'host': 'vrchat.com',
 				'cookie': `apiKey=${this.apiKey}`,
 				'authorization': `Basic ${btoa(`${this.credentials.username}:${this.credentials.password}`)}`
 			}
@@ -94,14 +92,29 @@ export class Api {
 		return this.getRequest(`https://vrchat.com/api/1/auth/user`);
 	}
 
+	private parseInstanceAccessTag(data: InstanceResponse): InstaceAccessTag {
+		if (data.hidden && !data.friends && !data.private) {
+			return InstaceAccessTag.FriendsPlus;
+		}
+		if (data.friends && !data.private) {
+			return InstaceAccessTag.Friends;
+		}
+		if (data.private && !data.canRequestInvite) {
+			return InstaceAccessTag.Invite;
+		}
+		if (data.private && data.canRequestInvite) {
+			return InstaceAccessTag.InvitePlus;
+		}
+		return InstaceAccessTag.Public;
+	}
+
 	getInstaceById(id: InstanceId): Promise<Instance> {
 		return this.getRequest(`https://vrchat.com/api/1/worlds/${id.world}/${id.instance}`)
 			.then((data: InstanceResponse) => {
 				return {
 					id,
 					users: data.users.map(user => formatUserResponse(user, id)),
-					private: data.private,
-					friends: data.friends,
+					access: this.parseInstanceAccessTag(data),
 					nonce: data.nonce
 				};
 			});
