@@ -57,10 +57,10 @@ export class Api {
 		if (!this.credentials.username || !this.credentials.password) {
 			throw new Error('No credentials set');
 		}
+		url += `${(url.indexOf('?')!==-1) ? '&' : '?'}apiKey=${this.apiKey}`;
 		return fetch(this.proxyHandler(url), {
 			mode: 'cors',
 			headers: {
-				'cookie': `apiKey=${this.apiKey}`,
 				'authorization': `Basic ${btoa(`${this.credentials.username}:${this.credentials.password}`)}`
 			}
 		})
