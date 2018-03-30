@@ -55,7 +55,7 @@ export class Api {
 
 	baseRequest(url: string): Promise<any> {
 		if (!this.credentials.username || !this.credentials.password) {
-			throw new Error('No crendentials set');
+			throw new Error('No credentials set');
 		}
 		return fetch(this.proxyHandler(url), {
 			mode: 'cors',
