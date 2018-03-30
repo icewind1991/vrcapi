@@ -77,7 +77,7 @@ export class Api {
 	private ensureApiKey(): Promise<void> {
 		return this.apiKey ?
 			Promise.resolve() :
-			this.baseRequest(`https://api.vrchat.cloud/api/1/config`)
+			this.baseRequest(`https://vrchat.com/api/1/config`)
 				.then((data: ConfigResponse) => {
 					this.apiKey = data.clientApiKey;
 				});
