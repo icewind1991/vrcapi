@@ -29,7 +29,7 @@ function formatUserResponse(data: UserResponse | BaseUserResponse, location?: In
 
 export type CorsProxyHandler = (url: string) => string;
 
-export interface Credentails {
+export interface Credentials {
     username: string;
     password: string;
 }
@@ -37,14 +37,14 @@ export interface Credentails {
 const nullCorsProxy = url => url;
 
 export class Api {
-    constructor(credentials: Credentails, proxyHandler: CorsProxyHandler = nullCorsProxy) {
+    constructor(credentials: Credentials, proxyHandler: CorsProxyHandler = nullCorsProxy) {
         this.credentials = credentials;
         this.proxyHandler = proxyHandler;
     }
 
     private apiKey: string = '';
     private proxyHandler: CorsProxyHandler;
-    private credentials: Credentails = {
+    private credentials: Credentials = {
         username: '',
         password: ''
     };
