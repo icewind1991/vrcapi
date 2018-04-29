@@ -1,7 +1,7 @@
 import { InstanceAccessTag, Instance, InstanceId, User, World, WorldId, WorldInfo } from './Data';
 import {
     AuthUserResponse, ConfigResponse, InstanceResponse, BaseUserResponse, UserResponse,
-    WorldResponse, FriendsResponse, NotificationType, NotificationResponse
+    WorldResponse, FriendsResponse, NotificationType, NotificationResponse, CurrentUserResponse
 } from './ApiReponses';
 
 function hasLocation(data: UserResponse | BaseUserResponse): data is UserResponse {
@@ -49,6 +49,7 @@ export class Api {
         password: ''
     };
 
+    private cachedCurrentUser: Promise<User> | null = null;
     private cachedWorldInfo: Map<WorldId, Promise<WorldInfo>> = new Map();
 
     request(url: string, method: string = 'GET', body?: any): Promise<any> {
@@ -185,6 +186,15 @@ export class Api {
             };
     }
 
+    getCurrentUser(): Promise<User> {
+        if (this.cachedCurrentUser) {
+            return this.cachedCurrentUser;
+        }
+        this.cachedCurrentUser = this.request('https://vrchat.com/api/1/auth/user')
+            .then(formatUserResponse);
+        return this.cachedCurrentUser;
+    }
+
     getFriends(): Promise<User[]> {
         return this.request('https://vrchat.com/api/1/auth/user/friends')
             .then((data: FriendsResponse) => data.map(entry => formatUserResponse(entry, this.parseLocation(entry.location))));
@@ -202,27 +212,27 @@ export class Api {
             details: details ? JSON.stringify(details) : null,
             message
         };
-        return this.request(`https://vrc.icewind.me/api/1/user/${userId}/notification`, 'POST', body);
+        return this.request(`https://vrchat.com/api/1/user/${userId}/notification`, 'POST', body);
     }
 
     sendFriendRequest(userId: string) {
-        return this.request(`https://vrc.icewind.me/api/1/user/${userId}/friendRequest`, 'POST');
+        return this.request(`https://vrchat.com/api/1/user/${userId}/friendRequest`, 'POST');
     }
 
     acceptFriendRequest(notificationId: string) {
-        return this.request(`https://vrc.icewind.me/api/1/auth/user/notifications/${notificationId}/accept`, 'PUT');
+        return this.request(`https://vrchat.com/api/1/auth/user/notifications/${notificationId}/accept`, 'PUT');
     }
 
     deleteNotification(notificationId: string) {
-        return this.request(`https://vrc.icewind.me/api/1/auth/user/notifications/${notificationId}/hide`, 'PUT');
+        return this.request(`https://vrchat.com/api/1/auth/user/notifications/${notificationId}/hide`, 'PUT');
     }
 
     markNotificationAsRead(notificationId: string): Promise<NotificationResponse & { seen: true }> {
-        return this.request(`https://vrc.icewind.me/api/1/auth/user/notifications/${notificationId}/see`, 'PUT');
+        return this.request(`https://vrchat.com/api/1/auth/user/notifications/${notificationId}/see`, 'PUT');
     }
 
     getNotifications(type?: NotificationType): Promise<NotificationResponse[]> {
-        return this.request(`https://vrc.icewind.me/api/1/auth/user/notifications?type=${type}`);
+        return this.request(`https://vrchat.com/api/1/auth/user/notifications?type=${type}`);
     }
 
     acceptAllFriendRequests(): Promise<number> {

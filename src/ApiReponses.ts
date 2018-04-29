@@ -148,3 +148,23 @@ export interface NotificationResponse {
     seen: boolean;
     created_at: string;
 }
+
+export interface CurrentUserResponse extends BaseUserResponse {
+    pastDisplayNames: PastDisplayName[];
+    hasEmail: boolean;
+    obfuscatedEmail: string;
+    emailVerified: boolean;
+    hasBirthday: boolean;
+    unsubscribe: boolean;
+    friends: string[]
+    bluePrints: {};
+    currentAvatarBluePrint: {};
+    events: any[];
+    currentAvatar: string;
+    currentAvatarAssetUrl: string;
+    acceptedTOSVersion: string;
+    steamDetails: {};
+    hasLoggedInFromClient: boolean;
+    homeLocation: string;
+    authToken: string;
+}
