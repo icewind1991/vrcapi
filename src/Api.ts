@@ -1,7 +1,7 @@
 import { InstanceAccessTag, Instance, InstanceId, User, World, WorldId, WorldInfo } from './Data';
 import {
     AuthUserResponse, ConfigResponse, InstanceResponse, BaseUserResponse, UserResponse,
-    WorldResponse, FriendsResponse, NotificationType, NotificationResponse, CurrentUserResponse
+    WorldResponse, FriendsResponse, NotificationType, NotificationResponse, CurrentUserResponse, FriendStatusResponse
 } from './ApiReponses';
 
 function hasLocation(data: UserResponse | BaseUserResponse): data is UserResponse {
@@ -233,6 +233,10 @@ export class Api {
 
     getNotifications(type?: NotificationType): Promise<NotificationResponse[]> {
         return this.request(`https://vrchat.com/api/1/auth/user/notifications?type=${type}`);
+    }
+
+    getFriendStatus(userId: string): Promise<FriendStatusResponse> {
+        return this.request(`https://vrchat.com/api/1/user/${userId}/friendStatus`);
     }
 
     acceptAllFriendRequests(): Promise<number> {

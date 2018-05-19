@@ -136,7 +136,15 @@ export interface LocationUserResponse extends BaseUserResponse {
 
 export type FriendsResponse = LocationUserResponse[];
 
-export type NotificationType = 'all' | 'message' | 'friendrequest' | 'invite' | 'votetokick' | 'halp' | 'hidden' | 'requestinvite';
+export type NotificationType =
+    'all'
+    | 'message'
+    | 'friendrequest'
+    | 'invite'
+    | 'votetokick'
+    | 'halp'
+    | 'hidden'
+    | 'requestinvite';
 
 export interface NotificationResponse {
     id: string;
@@ -167,4 +175,10 @@ export interface CurrentUserResponse extends BaseUserResponse {
     hasLoggedInFromClient: boolean;
     homeLocation: string;
     authToken: string;
+}
+
+export interface FriendStatusResponse {
+    isFriend: boolean;
+    outgoingRequest: boolean;
+    incomingRequest: boolean;
 }
