@@ -136,7 +136,7 @@ export interface LocationUserResponse extends BaseUserResponse {
 
 export type FriendsResponse = LocationUserResponse[];
 
-export type NotificationType = 'all' | 'message' | 'friendrequest' | 'invite' | 'votetokick' | 'halp' | 'hidden';
+export type NotificationType = 'all' | 'message' | 'friendrequest' | 'invite' | 'votetokick' | 'halp' | 'hidden' | 'requestinvite';
 
 export interface NotificationResponse {
     id: string;
