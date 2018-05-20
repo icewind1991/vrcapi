@@ -43,6 +43,7 @@ export class Api {
     }
 
     private apiKey: string = '';
+    private configResponse: Promise<ConfigResponse> | null = null;
     private proxyHandler: CorsProxyHandler;
     private credentials: Credentials = {
         username: '',
@@ -80,10 +81,17 @@ export class Api {
             });
     }
 
+    private getConfig(): Promise<ConfigResponse> {
+        if (!this.configResponse) {
+            this.configResponse = this.baseRequest(`https://vrchat.com/api/1/config`);
+        }
+        return this.configResponse;
+    }
+
     private ensureApiKey(): Promise<void> {
         return this.apiKey ?
             Promise.resolve() :
-            this.baseRequest(`https://vrchat.com/api/1/config`)
+            this.getConfig()
                 .then((data: ConfigResponse) => {
                     this.apiKey = data.clientApiKey;
                 });
