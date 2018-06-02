@@ -1,7 +1,17 @@
 import { InstanceAccessTag, Instance, InstanceId, User, World, WorldId, WorldInfo } from './Data';
 import {
-    AuthUserResponse, ConfigResponse, InstanceResponse, BaseUserResponse, UserResponse,
-    WorldResponse, FriendsResponse, NotificationType, NotificationResponse, CurrentUserResponse, FriendStatusResponse
+    AuthUserResponse,
+    ConfigResponse,
+    InstanceResponse,
+    BaseUserResponse,
+    UserResponse,
+    WorldResponse,
+    FriendsResponse,
+    NotificationType,
+    NotificationResponse,
+    CurrentUserResponse,
+    FriendStatusResponse,
+    BlockedUser
 } from './ApiReponses';
 
 function hasLocation(data: UserResponse | BaseUserResponse): data is UserResponse {
@@ -252,6 +262,10 @@ export class Api {
             .then(notifications => notifications.filter(notification => notification.type === 'friendrequest'))
             .then(friendRequests => Promise.all(friendRequests.map(friendRequest => this.acceptFriendRequest(friendRequest.id))))
             .then(acceptedRequests => acceptedRequests.length);
+    }
+
+    getBlockedUsers(): Promise<BlockedUser[]> {
+        return this.request('https://vrchat.com/api/1/auth/user/blocks');
     }
 }
 

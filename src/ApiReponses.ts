@@ -182,3 +182,13 @@ export interface FriendStatusResponse {
     outgoingRequest: boolean;
     incomingRequest: boolean;
 }
+
+export interface BlockedUser {
+    id: string;
+    type: 'block';
+    sourceUserId: string;
+    sourceDisplayName: string;
+    targetUserId: string;
+    targetDisplayName: string;
+    created: string;
+}
