@@ -112,6 +112,11 @@ export class Api {
             .then(formatUserResponse);
     }
 
+    getUserById(id: string): Promise<User> {
+        return this.request(`https://vrchat.com/api/1/users/${id}`)
+            .then(formatUserResponse);
+    }
+
     private parseInstanceAccessTag(data: InstanceResponse): InstanceAccessTag {
         if (data.hidden && !data.friends && !data.private) {
             return InstanceAccessTag.FriendsPlus;
